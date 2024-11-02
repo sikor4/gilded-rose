@@ -4,19 +4,47 @@ namespace App\GildedRose\Entities;
 
 final class Item
 {
-    public $name;
-    public $sell_in;
-    public $quality;
+    function __construct(
+        public readonly string $name,
+        private int $sellIn,
+        private int $quality 
+    ) {}
 
-    function __construct($name, $sell_in, $quality)
+    public function getSellIn(): int
     {
-        $this->name = $name;
-        $this->sell_in = $sell_in;
+        return $this->sellIn;
+    }
+
+    public function getQuality(): int
+    {
+        return $this->quality;
+    }
+
+
+    public function setSellIn(int $sellIn): void
+    {
+        $this->sellIn = $sellIn;
+    }
+
+    public function setQuality(int $quality): void
+    {
         $this->quality = $quality;
     }
 
+    public function incrementQuality(): void
+    {
+        $this->quality++;
+    }
+
+    public function decrementQuality(): void
+    {
+        $this->quality--;
+    }
+
+
+    
     public function __toString()
     {
-        return "{$this->name}, {$this->sell_in}, {$this->quality}";
+        return "{$this->name}, {$this->sellIn}, {$this->quality}";
     }
 }
