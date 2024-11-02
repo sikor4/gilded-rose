@@ -1,7 +1,7 @@
 <?php
 
-use App\GildedRose;
-use App\Item;
+use App\GildedRose\Services\GildedRoseService;
+use App\GildedRose\Entities\Item;
 use PHPUnit\Framework\TestCase;
 
 class GildedRoseTest extends TestCase
@@ -20,7 +20,7 @@ class GildedRoseTest extends TestCase
     {
         $item = new Item($name, $sellIn, $quality);
 
-        $gildedRose = new GildedRose();
+        $gildedRose = new GildedRoseService();
         $gildedRose->updateQuality($item);
 
         $this->assertEquals($expectedSellIn, $item->sell_in);
@@ -69,7 +69,7 @@ class GildedRoseTest extends TestCase
             $item = new Item($initial['name'], $initial['sellIn'], 
             $initial['quality']);
             
-            $gildedRose = new GildedRose();
+            $gildedRose = new GildedRoseService();
             $gildedRose->updateQuality($item);
 
             $this->assertEquals(

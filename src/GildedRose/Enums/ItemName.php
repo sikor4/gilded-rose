@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\GildedRose\Enums;
 
 enum ItemName: string {
     case AGED_BRIE = 'Aged Brie';
