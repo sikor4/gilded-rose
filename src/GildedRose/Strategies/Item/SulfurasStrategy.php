@@ -3,20 +3,17 @@
 namespace App\GildedRose\Strategies\Item;
 
 use App\GildedRose\Entities\Item;
-use App\GildedRose\Enums\ItemName;
-use App\interfaces\UpdateStrategyInterface;
+use App\GildedRose\Strategies\Interfaces\UpdateItemStrategyInterface;
 
-class SulfurasStrategy implements UpdateStrategyInterface
+class SulfurasStrategy implements UpdateItemStrategyInterface
 {
-    public function update(Item $item)
+    public function update(Item $item): void
     {
-        if ($item->quality > 0 && $item->name === ItemName::SULFURAS->value) {
-            $item->quality = 80;
+        if ($item->getQuality() > 0) {
+            $item->setQuality(80);
         }
-        if ($item->name === ItemName::SULFURAS->value) {
-            return;
-        }
-    
+
+        return;
     }
 
 }

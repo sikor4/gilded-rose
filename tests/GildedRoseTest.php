@@ -23,8 +23,8 @@ class GildedRoseTest extends TestCase
         $gildedRose = new GildedRoseService();
         $gildedRose->updateQuality($item);
 
-        $this->assertEquals($expectedSellIn, $item->sell_in);
-        $this->assertEquals($expectedQuality, $item->quality);
+        $this->assertEquals($expectedSellIn, $item->getSellIn());
+        $this->assertEquals($expectedQuality, $item->getQuality());
     }
 
     public function itemsProvider(): array
@@ -74,7 +74,7 @@ class GildedRoseTest extends TestCase
 
             $this->assertEquals(
                     $expected['sellIn'], 
-                    $item->sell_in, 
+                    $item->getSellIn(), 
                     "Fail " . $initial['name'] . 
                     " sellIn " . $initial['sellIn'] . 
                     " quality " . $initial['quality']
@@ -82,7 +82,7 @@ class GildedRoseTest extends TestCase
             
             $this->assertEquals(
                     $expected['quality'], 
-                    $item->quality, 
+                    $item->getQuality(), 
                     "Fail " . $initial['name'] . 
                     " sellIn " . $initial['sellIn'] . 
                     " quality " . $initial['quality']
