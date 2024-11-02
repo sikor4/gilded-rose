@@ -15,12 +15,10 @@ final class GildedRose
 
 
 
-        
+
         if ($item->name !== ItemName::AGED_BRIE->value && $item->name !== ItemName::BACKSTAGE_PASS->value) {
             if ($item->quality > 0) {
-                if ($item->name !== ItemName::SULFURAS->value) {
                     $item->quality--;
-                } 
             }
         } else {
             if ($item->quality < 50) {
@@ -40,27 +38,22 @@ final class GildedRose
             }
         }
 
-        if ($item->name !== ItemName::SULFURAS->value) {
-            $item->sell_in--;
-        }
-
+        $item->sell_in--;
+ 
         if ($item->sell_in < 0) {
-            if ($item->name !== ItemName::AGED_BRIE->value) {
-                if ($item->name !== ItemName::BACKSTAGE_PASS->value) {
-                    if ($item->quality > 0) {
-                        if ($item->name !== ItemName::SULFURAS->value) {
-                            $item->quality--;
-                        }
-                    }
-                } else {
-                    $item->quality = 0;
-                }
-            } else {
-                if ($item->quality < 50) {
-                    $item->quality++;
-                }
+            
+            if ($item->quality < 50 && $item->name === ItemName::AGED_BRIE->value) {
+                $item->quality++;
             }
-        }
-    }
+            
+            if ($item->quality > 0 && $item->name === ItemName::ELIXIR->value) {
+                $item->quality--;
+            }
+             
+            if ($item->name === ItemName::BACKSTAGE_PASS->value) {
+                $item->quality = 0;
+            }
+        } 
 
+    }
 }
