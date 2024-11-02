@@ -2,4 +2,11 @@
 
 namespace App\GildedRose\Strategies\Interfaces;
 
-class UpdateItemStrategyInterface {}
+use App\GildedRose\Entities\Item;
+
+interface UpdateItemStrategyInterface 
+{
+ 
+    public function update(Item $item);
+
+}
