@@ -5,7 +5,9 @@ use App\Item;
 use PHPUnit\Framework\TestCase;
 
 class GildedRoseTest extends TestCase
-{
+{    
+    private const BASELINE_RESULTS_SNAPSHOT_FILE = __DIR__ . '/../src/BaselineTestsResults/tests_results.json';
+
     /**
      * @dataProvider itemsProvider
      * @param string $name
@@ -47,6 +49,44 @@ class GildedRoseTest extends TestCase
             'Sulfuras after sell in date' => ['Sulfuras, Hand of Ragnaros', -1, 80, -1, 80],
             'Elixir of the Mongoose before sell in date' => ['Elixir of the Mongoose', 10, 10, 9, 9],
             'Elixir of the Mongoose sell in date' => ['Elixir of the Mongoose', 0, 10, -1, 8],
+
+            'Aged Brie sell in date' => ['Aged Brie', 0, 10, -1, 12],
+            'Backstage passes before sell in date but 0 items' => ['Backstage passes to a TAFKAL80ETC concert', 0, 0, -1, 0],
+            'Sulfuras before sell in date but 0 items' => ['Sulfuras, Hand of Ragnaros', 0, 80, 0, 80],
+            'Elixir of the Mongoose after in date but 0 items' => ['Elixir of the Mongoose', 0, 0, -1, 0],
         ];
+    }
+
+    public function test_updates_quality_for_snapshotted_baseline_multiple_scenarios(): void 
+    {
+        $baselineResults = json_decode(file_get_contents(self::BASELINE_RESULTS_SNAPSHOT_FILE), true);
+
+        foreach ($baselineResults as $case) {
+
+            $initial = $case['initial'];
+            $expected = $case['result'];
+
+            $item = new Item($initial['name'], $initial['sellIn'], 
+            $initial['quality']);
+            
+            $gildedRose = new GildedRose();
+            $gildedRose->updateQuality($item);
+
+            $this->assertEquals(
+                    $expected['sellIn'], 
+                    $item->sell_in, 
+                    "Fail " . $initial['name'] . 
+                    " sellIn " . $initial['sellIn'] . 
+                    " quality " . $initial['quality']
+            );
+            
+            $this->assertEquals(
+                    $expected['quality'], 
+                    $item->quality, 
+                    "Fail " . $initial['name'] . 
+                    " sellIn " . $initial['sellIn'] . 
+                    " quality " . $initial['quality']
+            );
+        }
     }
 }
