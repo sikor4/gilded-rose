@@ -16,13 +16,16 @@ final class GildedRose
 
 
 
-        if ($item->name !== ItemName::AGED_BRIE->value && $item->name !== ItemName::BACKSTAGE_PASS->value) {
+        if ($item->name === ItemName::ELIXIR->value) {
             if ($item->quality > 0) {
                     $item->quality--;
             }
-        } else {
+
+        } 
+        else {
             if ($item->quality < 50) {
                 $item->quality++;
+                
                 if ($item->name === ItemName::BACKSTAGE_PASS->value) {
                     if ($item->sell_in < 11) {
                         if ($item->quality < 50) {
