@@ -6,7 +6,5 @@ use App\GildedRose\Entities\Item;
 
 interface UpdateItemStrategyInterface 
 {
- 
-    public function update(Item $item);
-
+    public function update(Item $item): void;
 }

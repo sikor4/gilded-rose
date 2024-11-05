@@ -7,11 +7,13 @@ use App\GildedRose\Strategies\Interfaces\UpdateItemStrategyInterface;
 
 class SulfurasStrategy implements UpdateItemStrategyInterface
 {
-    public function update(Item $item)
+    public function update(Item $item): void
     {
         if ($item->getQuality() > 0) {
             $item->setQuality(80);
         }
+
+        return;
     }
 
 }

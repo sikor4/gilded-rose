@@ -2,9 +2,11 @@
 
 namespace App\GildedRose\Entities;
 
+use App\GildedRose\Enums\ItemName;
+
 final class Item
 {
-    function __construct(
+    public function __construct(
         public readonly string $name,
         private int $sellIn,
         private int $quality 
@@ -20,7 +22,6 @@ final class Item
         return $this->quality;
     }
 
-
     public function setSellIn(int $sellIn): void
     {
         $this->sellIn = $sellIn;
@@ -28,23 +29,34 @@ final class Item
 
     public function setQuality(int $quality): void
     {
-        $this->quality = $quality;
+        $this->quality = max(0, min($this->getMaxQuality(), $quality));
     }
 
     public function incrementQuality(): void
     {
-        $this->quality++;
+        if ($this->quality < $this->getMaxQuality()) {
+            $this->quality++;
+        }
     }
 
     public function decrementQuality(): void
     {
-        $this->quality--;
+        if ($this->quality > 0) {
+            $this->quality--;
+        }
     }
 
-
-    
-    public function __toString()
+    private function getMaxQuality(): int
     {
-        return "{$this->name}, {$this->sellIn}, {$this->quality}";
+        return $this->isLegendary() ? 80 : 50;
     }
+
+    private function isLegendary(): bool
+    {
+        return in_array($this->name, [
+            ItemName::SULFURAS->value
+
+        ]);
+    }
+
 }

@@ -7,9 +7,9 @@ use App\GildedRose\Strategies\Interfaces\UpdateItemStrategyInterface;
 
 class DefaultStrategy implements UpdateItemStrategyInterface
 {
-    public function update(Item $item)
+    public function update(Item $item): void
     {
-        
+        return;
     }
 
 }

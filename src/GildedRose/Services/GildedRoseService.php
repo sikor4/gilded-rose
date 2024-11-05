@@ -29,40 +29,5 @@ final class GildedRoseService
             default => (new DefaultStrategy())
         };
     }
-
-    //
-    public function deprecated($item) {
-        // if ($item->getQuality() > 0 && $item->name === ItemName::SULFURAS->value) {
-        //     $item->setQuality(80);
-        // }
-        // if ($item->name === ItemName::SULFURAS->value) {
-        //     return;
-        // }
-
-
         
-            
-
-        if ($item->name === ItemName::BACKSTAGE_PASS->value) {
-            if ($item->getQuality() < 50) {
-                $item->increaseQuality();
-                
-                if ($item->sell_in < 11 && $item->getQuality() < 50) {
-                    $item->increaseQuality();
-                }
-                if ($item->sell_in < 6 && $item->getQuality() < 50) {
-                    $item->decreaseQuality();
-                }
-            }
-
-            $item->sell_in--;
-            
-            if ($item->sell_in < 0 && $item->name === ItemName::BACKSTAGE_PASS->value) {
-                $item->setQuality(0);
-            }
-        
-            return;
-        }    
-        
-    }
 }
