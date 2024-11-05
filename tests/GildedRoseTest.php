@@ -2,12 +2,33 @@
 
 use App\GildedRose\Services\GildedRoseService;
 use App\GildedRose\Entities\Item;
+use App\GildedRose\Services\StrategyRegistryService;
+use App\GildedRose\Strategies\Item\AgedBrieStrategy;
+use App\GildedRose\Strategies\Item\BackstagePassStrategy;
+use App\GildedRose\Strategies\Item\DefaultStrategy;
+use App\GildedRose\Strategies\Item\ElixirStrategy;
+use App\GildedRose\Strategies\Item\SulfurasStrategy;
 use PHPUnit\Framework\TestCase;
 
 class GildedRoseTest extends TestCase
 {    
     private const BASELINE_RESULTS_SNAPSHOT_FILE = __DIR__ . '/../src/BaselineTestsResults/tests_results.json';
+    private GildedRoseService $gildedRose;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $strategyRegistry = new StrategyRegistryService();
+        $strategyRegistry->registerStrategy('Aged Brie', AgedBrieStrategy::class);
+        $strategyRegistry->registerStrategy('Backstage passes to a TAFKAL80ETC concert', BackstagePassStrategy::class);
+        $strategyRegistry->registerStrategy('Sulfuras, Hand of Ragnaros', SulfurasStrategy::class);
+        $strategyRegistry->registerStrategy('Elixir of the Mongoose', ElixirStrategy::class);
+        $strategyRegistry->registerStrategy('default', DefaultStrategy::class);
+
+        $this->gildedRose = new GildedRoseService($strategyRegistry);
+    }
+    
     /**
      * @dataProvider itemsProvider
      * @param string $name
@@ -20,8 +41,7 @@ class GildedRoseTest extends TestCase
     {
         $item = new Item($name, $sellIn, $quality);
 
-        $gildedRose = new GildedRoseService();
-        $gildedRose->updateQuality($item);
+        $this->gildedRose->updateQuality($item);
 
         $this->assertEquals($expectedSellIn, $item->getSellIn());
         $this->assertEquals($expectedQuality, $item->getQuality());
@@ -62,31 +82,29 @@ class GildedRoseTest extends TestCase
         $baselineResults = json_decode(file_get_contents(self::BASELINE_RESULTS_SNAPSHOT_FILE), true);
 
         foreach ($baselineResults as $case) {
-
             $initial = $case['initial'];
             $expected = $case['result'];
 
-            $item = new Item($initial['name'], $initial['sellIn'], 
-            $initial['quality']);
-            
-            $gildedRose = new GildedRoseService();
-            $gildedRose->updateQuality($item);
+            $item = new Item($initial['name'], $initial['sellIn'], $initial['quality']);
+
+            $this->gildedRose->updateQuality($item);
 
             $this->assertEquals(
-                    $expected['sellIn'], 
-                    $item->getSellIn(), 
-                    "Fail " . $initial['name'] . 
-                    " sellIn " . $initial['sellIn'] . 
-                    " quality " . $initial['quality']
+                $expected['sellIn'], 
+                $item->getSellIn(), 
+                "Fail " . $initial['name'] . 
+                " sellIn " . $initial['sellIn'] . 
+                " quality " . $initial['quality']
             );
-            
+
             $this->assertEquals(
-                    $expected['quality'], 
-                    $item->getQuality(), 
-                    "Fail " . $initial['name'] . 
-                    " sellIn " . $initial['sellIn'] . 
-                    " quality " . $initial['quality']
+                $expected['quality'], 
+                $item->getQuality(), 
+                "Fail " . $initial['name'] . 
+                " sellIn " . $initial['sellIn'] . 
+                " quality " . $initial['quality']
             );
         }
     }
+
 }
